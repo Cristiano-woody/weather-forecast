@@ -16,7 +16,7 @@ export default function WeatherApp() {
     vento: '3.2Km/h'
   });
 
-  const [sugestoes, setSugestoes] = useState([
+  const [sugestoesNacionais, setSugestoesNacioanis] = useState([
     { nome: 'Sao Paulo', key: 1 },
     { nome: 'Rio de janeiro ', key: 2 },
     { nome: 'Recife', key: 3 },
@@ -34,7 +34,25 @@ export default function WeatherApp() {
     { nome: 'Natal', key: 15 },
     { nome: 'Palmas', key: 16 },
 
-  ])
+])
+    const [sugestoesInternacionais, setSugestoesInteracioanis] = useState([
+      { nome: 'Tokio', key: 1 },
+      { nome: 'Berlim ', key: 2 },
+      { nome: 'Roma', key: 3 },
+      { nome: 'Washington', key: 4 },
+      { nome: 'California', key: 5 },
+      { nome: 'Toronto', key: 6 },
+      { nome: 'Pequim', key: 7 },
+      { nome: 'Londres', key: 8 },
+      { nome: 'Argel', key: 9 },
+      { nome: 'Buenos Aires	', key: 10 },
+      { nome: 'Jerusalém', key: 11 },
+      { nome: 'Dublim', key: 12 },
+      { nome: 'Vaduz', key: 13 },
+      { nome: 'Cidade do México	', key: 14 },
+      { nome: 'moscow', key: 15 },
+      { nome: 'Caracas', key: 16 },
+    ])
 
   const [containerPrevisao, setcontainerPrevisao] = useState(false);
 
@@ -53,7 +71,7 @@ export default function WeatherApp() {
     const data = await res.json();
     console.log(data)
     setData(data)
-    setSugestoes(false)
+    setcontainerSugestao(false)
     setcontainerPrevisao(true);
   };
 
@@ -72,11 +90,16 @@ export default function WeatherApp() {
     })
   }
 
+  const abrirSugestoes = () =>{
+    setcontainerPrevisao(false);
+    setcontainerSugestao(true);
+  }
+
   return (
     <LinearGradient colors={['#000712', '#002863']} style={styles.linearGradient}>
       <StatusBar style="auto" />
       <View style={styles.containerSearch}>
-        <Text style={styles.title}>Clima Tempo</Text>
+        <Text style={styles.title}>previsão do tempo</Text>
         <StatusBar style="auto" />
         <TextInput
           style={styles.inputSearch}
@@ -84,7 +107,7 @@ export default function WeatherApp() {
           value={city}
           onChangeText={(text) => setCity(text)}
         />
-        <Button title="Buscar" onPress={handleSubmitData} />
+        <Button title="Buscar" color='rgba(217,217,217,0.4)' onPress={handleSubmitData} />
       </View>
 
       {containerPrevisao && (
@@ -103,25 +126,38 @@ export default function WeatherApp() {
               <Text style={styles.vento}>{weatherData.vento} Km/h</Text>
             </View>
           </View>
+          <Button style={styles.button} color='rgba(217,217,217,0.2)' title="Sugestoes" onPress={abrirSugestoes} />
         </View>
       )}
-
       {containerSugestao && (
         <View style={styles.containerSugestao}>
+          <Text style={styles.TituloSugestoes}>Sugestões Nacionais:</Text>
           <FlatList
             style={styles.flatListSugestao}
             numColumns={1}
             keyExtractor={(item) => item.key}
-            data={sugestoes}
+            data={sugestoesNacionais}
             renderItem={({ item }) => (
-              <TouchableOpacity  style={styles.ContainerItemListSugestoes}>
+              <TouchableOpacity onPress={() => setCity(item.nome)}  style={styles.ContainerItemListSugestoes}>
                 <Text>{item.nome}</Text>
               </TouchableOpacity>
             )}
           />
+          <Text style={styles.TituloSugestoes}>Sugestoes Internacionais:</Text>
+         <ScrollView>
+          {sugestoesInternacionais.map(
+            (item) =>{
+              return (
+                <TouchableOpacity key={item.key} onPress={() => setCity(item.nome)} style={styles.ContainerItemListSugestoes}>
+                  <Text>{item.nome}</Text>
+                </TouchableOpacity>
+              )
+            }
+          )}
+         </ScrollView>
         </View>
+        
       )}
-
     </LinearGradient>
   );
 }
@@ -158,7 +194,8 @@ const styles = StyleSheet.create({
   containerPrevisao: {
     flex: 1,
     gap: 55,
-    alignItems: 'center'
+    alignItems: 'center',
+    marginBottom: 60
   },
   nomeCidade: {
     fontSize: 25,
@@ -208,6 +245,7 @@ const styles = StyleSheet.create({
     width: 300
   },
   ContainerItemListSugestoes: {
+    
     backgroundColor: 'rgba(217,217,217,0.2)',
     width: 300,
     height: 60,
@@ -217,5 +255,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderRadius: 10,
   },
+
+  TituloSugestoes: {
+    color:'white',
+    fontSize: 20,
+    textAlign:'center'
+  },
+  button: {
+    borderRadius: 5
+  }
 });
 
