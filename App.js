@@ -60,8 +60,7 @@ export default function WeatherApp() {
 
   const handleSubmitData = async () => {
     try {
-      apiKey = '9936fcd42e0f48392a0428c51e2526a4';
-      const apiWeatherURL = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${apiKey}&lang=pt_br`
+      const apiWeatherURL = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${'apikey'}&lang=pt_br`
       var res = await fetch(apiWeatherURL);
 
     } catch (error) {
